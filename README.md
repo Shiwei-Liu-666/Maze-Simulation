@@ -1,4 +1,4 @@
-# Path Planning & IMU Simulation Program for HCARD Group project
+# Path Planning & IMU Simulation Program for HCARD Group project (v0.1)
 This project simulates the navigation process and vibration feedback mechanism of visually impaired users wearing our vibration-based auxiliary navigation tool in an indoor maze environment. The program automatically plans the shortest path from the starting point to the destination based on environmental conditions, then guides the user to reach the target location. At each corner, the system determines the required turning angle using position and orientation data received from the IMU, classifies the vibration intensity into three levels based on the absolute angle value, and transmits vibration commands to the device via the communication module. The code implementation regarding vibration command transmission and actual IMU data acquisition requires further refinement.
 
 ## 📦 Installation
