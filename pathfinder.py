@@ -1,13 +1,16 @@
 # ------ HCARD Group 1 ------
 import heapq
+from math import atan2, degrees, pi
 from Constants import *
 
 class PathFinder:
-    """A* pathfinding implementation"""
+    """A* pathfinding with turn point detection"""
     def __init__(self, maze):
         self.maze = maze
         self.path = []
+        self.turn_points = []  # Stores turn point data (index, position, direction)
         self._find_path()
+        self._detect_turn_directions()
         
     def _find_path(self):
         start = self.maze.start
@@ -62,3 +65,41 @@ class PathFinder:
             current = came_from[current]
         path.append(self.maze.start)
         return path[::-1]
+    
+    def _detect_turn_directions(self):
+        """Turn point detection algorithm"""
+        self.turn_points = []
+        if len(self.path) < 3:
+            return
+        
+        for i in range(1, len(self.path)-1):
+            prev = self.path[i-1]
+            current = self.path[i]
+            next_ = self.path[i+1]
+            
+            # Calculate direction vectors (grid coordinates)
+            vec_in = (prev[1] - current[1], current[0] - prev[0])    # Rotated 90° for screen coordinates
+            vec_out = (next_[1] - current[1], current[0] - next_[0]) 
+            
+            # Skip straight movements
+            if vec_in[0]*vec_out[1] == vec_in[1]*vec_out[0]:  # Check colinearity
+                continue
+                
+            # Calculate angles (considering screen Y-axis points downward)
+            angle_in = atan2(-vec_in[1], vec_in[0])  # Invert Y component
+            angle_out = atan2(-vec_out[1], vec_out[0])
+            diff = (angle_out - angle_in + pi) % (2*pi) - pi
+            
+            # Valid turn condition: angle change > 10 degrees
+            if abs(degrees(diff)) > 10:
+                # Determine turn direction
+                direction = "Left" if diff > 0 else "Right"  # Adjusted for coordinate rotation
+                screen_x = CELL_SIZE * (current[1] + 0.5)
+                screen_y = CELL_SIZE * (current[0] + 0.5)
+                
+                self.turn_points.append({
+                    "grid_pos": current,
+                    "screen_pos": (screen_x, screen_y),
+                    "direction": direction,
+                    "angle_diff": abs(degrees(diff))
+                })

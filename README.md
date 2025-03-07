@@ -1,5 +1,13 @@
-# Path Planning & IMU Simulation Program for HCARD Group project
-This project simulates the navigation process and vibration feedback mechanism of visually impaired users wearing our vibration-based auxiliary navigation tool in an indoor maze environment. The program automatically plans the shortest path from the starting point to the destination based on environmental conditions, then guides the user to reach the target location. At each corner, the system determines the required turning angle using position and orientation data received from the IMU, classifies the vibration intensity into three levels based on the absolute angle value, and transmits vibration commands to the device via the communication module. The code implementation regarding vibration command transmission and actual IMU data acquisition requires further refinement.
+# Path Planning & IMU Simulation Program for HCARD Group project (***v_0.2***)
+This project simulates the navigation process and vibration feedback mechanism of visually impaired users wearing our vibration-based auxiliary navigation tool in an indoor maze environment. The program automatically plans the shortest path from the starting point to the destination based on environmental conditions, then guides the user to reach the target location. At each corner, the system determines the required turning angle using position and orientation data received from the IMU, and transmits vibration commands to the device via the communication module. The code implementation regarding vibration command transmission and actual IMU data acquisition requires further refinement.
+## ✨ What's new in ***v_0.2***
+1. Logical errors and bugs in corner detection mechanism has been resolved and improved.
+2. The multi-level corner detection mechanism has been removed because it is greatly affected by the noise in the IMU data.
+3. Improved visualisation. Press `SPACE` to show the path and `BACKSPACE` to show detected corners.
+<div style="display: flex; gap: 10px; justify-content: center;">
+  <img src="./IMGS/MazeWithoutPath.png" alt="MazeWithoutPathcorner" style="width: 48%;">
+  <img src="./IMGS/MazeWithPathTruns.png" alt="MazeWithPathTruns" style="width: 48%;">
+</div>
 
 ## 📦 Installation
 ```bash
@@ -31,6 +39,14 @@ class PathFinder:
         
     def _find_path(self):
         .......... # core codes
+```
+#### 🛠️ ***Updates & Improvements & Bug fixing in v_0.2***
+Added new turn point detection logic to the `PathFinder`. After the ***A-star algorithm*** plans a shortest path, it directly identifies turn points within this path. The previous implementation incorrectly utilized future-generated IMU data (in simulation), which was a logical error that has now been resolved.
+```python
+def _detect_turn_directions(self):
+        """Turn point detection algorithm"""
+        self.turn_points = []
+        ....... # core codes
 ```
 
 ### 📡 IMU Data (Simulation)
@@ -65,17 +81,28 @@ class MainApplication:
 
         pass
 ```
+#### 🛠️ ***Updates & Improvements & Bug fixing in v_0.2***
+Unlike previous versions, the program now triggers the vibration command when the user is 12 pixels away from the next turn. This adjustment accounts for potential Bluetooth communication delays, the duration of vibration feedback, and the user’s required reaction time.
+```python
+if distance <= self.alert_distance:
+   path_angle = atan2(dy, dx)
+   agent_angle = self.agent.current_heading
+   angle_diff = degrees((path_angle - agent_angle + pi) % (2*pi) - pi)
+   
+   if abs(angle_diff) < self.direction_alingnment:  # Direction alignment threshold
+       print(f"Turn {required_direction} {distance:.1f} units ahead!")
+       if not SIMULATION_MODE:
+           self.send_vibration_command(required_direction)  # Send vibration command (only used in real environment)
+       self.next_turn_index += 1
+```
 
 ### 🔍 Multi-level Corner Detection
-The system implements a three-tier detection mechanism that intelligently identifies turn types by analyzing continuous angular differences (`actual_diff`) along the path.
-| Level | Angle Range | Detection Logic | Output Example | Vibration feedback |
-|-------|-------------|-----------------|----------------|----------------|
-| 1     | 10°-60°     | `10 ≤ actual_diff ≤ 60` | "Left turn detected! Level: 1 (Angle: 45.0°)" | Level 1|
-| 2     | 61°-120°    | `61 ≤ actual_diff ≤ 120` | "Right turn detected! Level: 2 (Angle: 90.5°)" | Level 2|
-| 3     | 121°-180°   | `121 ≤ actual_diff ≤ 180` | "Left turn detected! Level: 3 (Angle: 135.2°)" |Level 3|
-| 0     | <10° or >180° | \\ | No detection output |None|
+<del>The system implements a three-tier detection mechanism that intelligently identifies turn types by analyzing continuous angular differences (`actual_diff`) along the path.
+</del>
+#### 🛠️ ***Updates & Improvements & Bug fixing in v_0.2***
+This feature has been removed because inherent inaccuracies in the IMU sensor can cause discrepancies between the user's actual orientation and the estimated orientation (compared to an ideal noise-free trajectory, this error ranges from 1 to 12 degrees approximately). In certain scenarios, for example, if the user's actual angle relative to a corner is 55 degrees but the IMU inaccurately estimates it as 62 degrees, the user would receive a `level 2` vibration feedback instead of `level 1`. This mismatch could lead to significant deviation, resulting in navigation failure. Moreover, visually impaired users may even face tripping hazards due to such errors.
 
-### 🛠️ Parameters and Constants
+### 🎯 Parameters and Constants
 The key parameters used in the simulation are defined in the `Constants.py` file, including the maze size, and the parameters for the pygame window and the IMU data (noise and detection interval). The start and end points could be defined in `maze.json`.
 ```json
 "start": [
@@ -89,4 +116,4 @@ The key parameters used in the simulation are defined in the `Constants.py` file
 ```
 
 ## ▶️ Demo
-![DEMO](recordings/DemoRecording.gif)
+![DEMO](IMGS/DemoRecording.gif)
