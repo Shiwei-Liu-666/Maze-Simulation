@@ -120,8 +120,5 @@ The key parameters used in the simulation are defined in the `Constants.py` file
 ```
 
 ## ▶️ Demo
-<<<<<<< HEAD
 ![DEMO](IMGS/DemoRecording.gif)
-=======
-![DEMO](recordings/DemoRecording.gif)
->>>>>>> 26ce04f0106b07a7de139896f90b9521d2759941
+
