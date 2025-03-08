@@ -13,7 +13,6 @@ This project simulates the navigation process and vibration feedback mechanism o
 ```bash
 pip install pygame
 pip install numpy
-pip install heapq
 ```
 python version: `3.9.0`
 
