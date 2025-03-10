@@ -48,13 +48,13 @@ class PathFinder:
         .......... # core codes
 ```
 #### 🛠️ ***Updates & Improvements & Bug fixing in v_0.2***
-Added new turn point detection logic to the `PathFinder`. After the ***A-star algorithm*** plans a shortest path, it directly identifies turn points within this path. The previous implementation incorrectly utilized future-generated IMU data (in simulation), which was a logical error that has now been resolved.
-```python
-def _detect_turn_directions(self):
-        """Turn point detection algorithm"""
-        self.turn_points = []
-        ....... # core codes
-```
+   Added new turn point detection logic to the `PathFinder`. After the ***A-star algorithm*** plans a shortest path, it directly identifies turn points within this path. The previous implementation incorrectly utilized future-generated IMU data (in simulation), which was a logical error that has now been resolved.
+   ```python
+   def _detect_turn_directions(self):
+           """Turn point detection algorithm"""
+           self.turn_points = []
+           ....... # core codes
+   ```
 
 ### 📡 IMU Data (Simulation)
 In this simulation code (`imu.py`), I only simulated the IMU data for now (generating data with Gaussian noise). The real-time IMU data can be obtained by capturing the data from the IMU sensor, and you need to add the code for it in the `get_real_imu_data()` function shown below.
@@ -74,6 +74,32 @@ class IMUSimulator:
         return (x, y, theta)
         pass
 ```
+#### 🛠️ ***Updates & Improvements & Bug fixing in v_0.3***
+   The new function `position_tracking.py` has been updated to receive data from the phone via Bluetooth. The `get_real_imu_data` function now returns the data from the phone.The `send_vibration_command` function still need to be refined to send vibration commands to the phone.
+   ```python
+    class KalmanFilterHeading:
+        def __init__(self, initial_heading=0.0):
+            ......
+        ......
+    
+    class MyCustomListener:
+        def __init__(self, max_points=100, threshold=20):
+            ......
+        
+        def send_position(self, x, y, heading):
+        """ Send position and heading to UDP server """
+            ......
+        
+        def detect_step(self, pitch, current_time):
+        """ Detects steps based on pitch maxima and minima with threshold """
+            ......
+    
+    server = HIMUServer()   # receive data from phone
+    listener = MyCustomListener()
+    server.addListener(listener)
+    server.start("TCP", 2055)   # TCP port
+   ```
+
 
 ### ⚡ Vibration feedback
 Vibration Feedback is implemented to provide feedback to the user when they make a turn. It uses the `actual_diff` value to determine the turn type and provides appropriate vibration feedback. Send the appropriate vibration feedback via Bluetooth to the device by modifying the `send_vibration_command` function in the `application.py` file:
