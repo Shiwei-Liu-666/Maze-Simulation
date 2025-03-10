@@ -7,7 +7,8 @@ class Agent:
     """Mobile agent with IMU-based navigation"""
     def __init__(self):
         self.trail = []
-        self.current_pos = None
+        # self.current_pos = None
+        self.current_pos = (20, 20)
         self.current_heading = 0
         self.last_valid_data = None
     

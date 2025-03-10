@@ -1,27 +1,35 @@
-# Path Planning & IMU Simulation Program for HCARD Group project (***v_0.2***)
+# Path Planning & IMU Simulation Program for HCARD Group project (***v_0.3***)
 This project simulates the navigation process and vibration feedback mechanism of visually impaired users wearing our vibration-based auxiliary navigation tool in an indoor maze environment. The program automatically plans the shortest path from the starting point to the destination based on environmental conditions, then guides the user to reach the target location. At each corner, the system determines the required turning angle using position and orientation data received from the IMU, and transmits vibration commands to the device via the communication module. The code implementation regarding vibration command transmission and actual IMU data acquisition requires further refinement.
-## ✨ What's new in ***v_0.2***
-1. Logical errors and bugs in corner detection mechanism has been resolved and improved.
-2. The multi-level corner detection mechanism has been removed because it is greatly affected by the noise in the IMU data.
-3. Improved visualisation. Press `SPACE` to show the path and `BACKSPACE` to show detected corners.
-<div style="display: flex; gap: 10px; justify-content: center;">
-  <img src="./IMGS/MazeWithoutPath.png" alt="MazeWithoutPathcorner" style="width: 48%;">
-  <img src="./IMGS/MazeWithPathTruns.png" alt="MazeWithPathTruns" style="width: 48%;">
-</div>
+## ✨ What's new in ***v_0.3***
+A new feature for obtaining smartphone IMU data has been added. You only need to connect the computer and a smartphone with the special software installed to the same hotspot.
 
 ## 📦 Installation
-```bash
-pip install pygame
-pip install numpy
-```
-python version: `3.9.0`
+1. Install the required packages using pip in your conda environment.
+    ```bash
+    conda activate YOUR_ENV_NAME
+    pip install pygame
+    pip install numpy
+    pip install matplotlib
+    pip install scipy
+    ```
+    Recommended python version: `3.9.12`
+2. Install [HIMUServer package](https://github.com/ianovir/HIMUServer.git) in your conda environment. This package allows the program to receive data from phone's IMU.
+3. Install [HyperIMU application](https://play.google.com/store/apps/details?id=com.ianovir.hyper_imu) in your cellphone. 
 
 ## 🚀 Usage
-Simply run the `main.py`, and you can change the parameters in the `Constants.py` file.
-```bash
-python YOUR/PATH/TO/main.py
-```
-The Maze is saved in `./maze_data/maze.json` file. If you want to change to another maze, just delete it and run the program again, it will generate a new maze and save it in the same path.
+1. Make sure your phone is connected to the same hotspot as your computer, and change the "Server IP address" in HyperIMU application to the IP address of your computer (this couuld be found by running `ipconfig` in PowerShell).
+2. Open a terminal and run `main.py`. You can change the parameters in the `Constants.py` file.
+   ```bash
+   python YOUR/PATH/TO/main.py
+   ```
+   Now you should able to see a pygame window. The Maze is saved in `./maze_data/maze.json` file. If you want to change to another maze, just delete it and run the program again, it will generate a new maze and save it in the same path.
+3. Open another terminal and run `position_tracking.py`. You should see the following outputs in the terminal:
+   ```bash
+   protocol: TCP
+   RAW: no
+   waiting for connection...
+   ```
+4. In HyperIMU app, just press the green button ("Press to start"), and the program will start to receive data from the phone.
 
 ## 🗺️ Core Modules
 
@@ -117,3 +125,5 @@ The key parameters used in the simulation are defined in the `Constants.py` file
 ## ▶️ Demo
 ![DEMO](IMGS/DemoRecording.gif)
 
+## 🙏 Acknowledgments
+- [@Alireza8Kh](https://github.com/Alireza8Kh) developed `position_tracking.py` and is continuously updating and improving it.

@@ -99,7 +99,7 @@ class MainApplication:
             angle_diff = degrees((path_angle - agent_angle + pi) % (2*pi) - pi)
             
             if abs(angle_diff) < self.direction_alingnment:  # Direction alignment threshold
-                print(f"Turn {required_direction} {distance:.1f} units ahead!")
+                # print(f"Turn {required_direction} {distance:.1f} units ahead!")
                 if not SIMULATION_MODE:
                     self.send_vibration_command(required_direction)  # Send vibration command (only used in real environment)
                 self.next_turn_index += 1
@@ -141,10 +141,15 @@ class MainApplication:
             # IMU data handling
             if SIMULATION_MODE:  # If in real environment, use get_real_imu_data()
                 imu_data = self.imu.get_simulated_imu(current_time)
+                print(imu_data)
             else:
                 imu_data = self.imu.get_real_imu_data()
             self.agent.update(imu_data)
             
+            if DEBUG_MODE:
+                # print received UDP rawdata
+                self.imu._print_UDP_raw_data()
+
             # Turns detection
             self._check_upcoming_turn()
             
@@ -156,7 +161,10 @@ class MainApplication:
             if self.show_path:
                 self._draw_path()
             self.agent.draw(self.screen)
-            # self._draw_path_points()  # for Debuug only, uncomment if needed
+
+            if DEBUG_MODE:
+                self._draw_path_points()
+
             pygame.display.flip()
             self.clock.tick(FRAME_RATE)
         

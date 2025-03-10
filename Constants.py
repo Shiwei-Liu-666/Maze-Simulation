@@ -1,5 +1,6 @@
 # ------ HCARD Group 1 ------
-SIMULATION_MODE = True
+SIMULATION_MODE = False
+DEBUG_MODE = False
 MAZE_WIDTH = 15
 MAZE_HEIGHT = 10
 MAZE_FILE = "./maze_data/maze.json" # path to the maze file (cam be modified)
