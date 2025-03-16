@@ -1,7 +1,11 @@
-# Path Planning & IMU Simulation Program for HCARD Group project (***v_0.3***)
+# Path Planning & IMU Simulation Program for HCARD Group project (***v_0.4***)
 This project simulates the navigation process and vibration feedback mechanism of visually impaired users wearing our vibration-based auxiliary navigation tool in an indoor maze environment. The program automatically plans the shortest path from the starting point to the destination based on environmental conditions, then guides the user to reach the target location. At each corner, the system determines the required turning angle using position and orientation data received from the IMU, and transmits vibration commands to the device via the communication module. The code implementation regarding vibration command transmission and actual IMU data acquisition requires further refinement.
-## ✨ What's new in ***v_0.3***
-A new feature for obtaining smartphone IMU data has been added. You only need to connect the computer and a smartphone with the special software installed to the same hotspot.
+## ✨ What's new in ***v_0.4***
+The visualization window style has been changed. Now, the upper part of the window displays the maze, the user's pose, trajectory, and turning points, while the lower part shows an information panel. This panel presents the user's position and orientation and indicates whether the user should turn left or right using two arrows. For details, please refer to the demo below：
+
+## ▶️ Demo
+![DEMO](IMGS/DemoRecording.gif)
+
 
 ## 📦 Installation
 1. Install the required packages using pip in your conda environment.
@@ -147,9 +151,5 @@ The key parameters used in the simulation are defined in the `Constants.py` file
     14
   ]
 ```
-
-## ▶️ Demo
-![DEMO](IMGS/DemoRecording.gif)
-
 ## 🙏 Acknowledgments
 - [@Alireza8Kh](https://github.com/Alireza8Kh) developed `position_tracking.py` and is continuously updating and improving it.
