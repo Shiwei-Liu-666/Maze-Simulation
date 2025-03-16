@@ -141,7 +141,6 @@ class MainApplication:
             # IMU data handling
             if SIMULATION_MODE:  # If in real environment, use get_real_imu_data()
                 imu_data = self.imu.get_simulated_imu(current_time)
-                print(imu_data)
             else:
                 imu_data = self.imu.get_real_imu_data()
             self.agent.update(imu_data)
