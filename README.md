@@ -4,7 +4,7 @@ This project simulates the navigation process and vibration feedback mechanism o
 The visualization window style has been changed. Now, the upper part of the window displays the maze, the user's pose, trajectory, and turning points, while the lower part shows an information panel. This panel presents the user's position and orientation and indicates whether the user should turn left or right using two arrows. For details, please refer to the demo below：
 
 ## ▶️ Demo
-![DEMO](IMGS/DemoRecording.gif)
+![DEMO](./IMGS/DemoRecording.gif)
 
 
 ## 📦 Installation
