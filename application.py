@@ -99,7 +99,7 @@ class MainApplication:
             angle_diff = degrees((path_angle - agent_angle + pi) % (2*pi) - pi)
             
             if abs(angle_diff) < self.direction_alingnment:  # Direction alignment threshold
-                # print(f"Turn {required_direction} {distance:.1f} units ahead!")
+                print(f"Turn {required_direction} {distance:.1f} units ahead!")
                 if not SIMULATION_MODE:
                     self.send_vibration_command(required_direction)  # Send vibration command (only used in real environment)
                 self.next_turn_index += 1
