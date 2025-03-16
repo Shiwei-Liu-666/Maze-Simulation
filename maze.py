@@ -12,7 +12,8 @@ class MazeGenerator:
         self.end = (MAZE_HEIGHT-1, MAZE_WIDTH-1)
         
         if not self.load_from_file():
-            self.generate_new_maze()
+            # self.generate_new_maze()  # generate a new complex maze
+            self.generate_simple_maze() # generate a simple maze (2 turns)
             self.save_to_file()
 
     def generate_new_maze(self):
@@ -128,3 +129,25 @@ class MazeGenerator:
         elif direction == 'right':
             self.grid[row][col]['right'] = False
             self.grid[nr][nc]['left'] = False
+
+    def generate_simple_maze(self):
+        """generate a simple maze"""
+        self.grid = [[{'top':1,'bottom':1,'left':1,'right':1} for _ in range(MAZE_WIDTH)] for _ in range(MAZE_HEIGHT)]
+        
+        # main path：right→down→right→down→right(2 corners)
+        path = [
+            (0,0), (0,1), (0,2), (0,3), (0,4),
+            (1,4), (2,4), (3,4), (4,4),
+            (4,5), (4,6), (4,7), (4,8), (4,9), (4,10), (4,11), (4,12), (4,13), (4,14),
+            (5,14), (6,14), (7,14), (8,14), (9,14)
+        ]
+        
+        for i in range(len(path)-1):
+            current = path[i]
+            next_ = path[i+1]
+            if next_[0] > current[0]:
+                self.grid[current[0]][current[1]]['bottom'] = 0
+                self.grid[next_[0]][next_[1]]['top'] = 0
+            elif next_[1] > current[1]:
+                self.grid[current[0]][current[1]]['right'] = 0
+                self.grid[next_[0]][next_[1]]['left'] = 0
